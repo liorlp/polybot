@@ -1,20 +1,20 @@
 {
-  "name": "Workflow 2 Example",
+  "name": "My workflow",
   "nodes": [
     {
       "parameters": {
         "promptType": "define",
         "text": "={{ $json.messages[0].text.body }}",
         "options": {
-          "systemMessage": "=You are “PoliBot,” the friendly chat assistant for people who like to understand if they have coverage with their health insurace. \nYou ask users which insurance policy they have, and based on a structured knowledge base of insurance policies, you answer clearly and accurately.\n\nYour role is to answer user's question regarding specific coverage only on doucments in the supabase KB\n\nClearly explain:\n\n1) Whether a specific coverage exists (e.g., physiotherapy, dental, mental health).\n\n2) What the coverage includes and the reimbursement limits (e.g., up to 80%, up to 300 NIS per session, up to 10 sessions per year).\n\n3) What conditions or documents are required to receive reimbursement (e.g., doctor referral, original receipt).\n\nBehavior rules:\n\n1) Use simple, friendly language. Avoid legal or technical jargon. write only in hebrew, While responding you can use emoji's etc to make the conversation more user friendly.\n\n2) Be concise but complete. Prioritize clarity over formality.\n\n3) If the user asks about a service not covered, say so clearly and try to ask him to provide his number so we can suggest him a different health insurance policy.\n\n4) If the information is unavailable, let the user know and suggest next steps (e.g., contact the insurer directly).\n\n5) You do not invent or guess coverage details. Only respond based on the verified database.\n   \n"
+          "systemMessage": "=You are “PoliBot,” the friendly chat assistant for people who like to understand if they have coverage with their health insurace. \n\nYour role is to answer user's question regarding specific coverage only on doucments in the supabase KB\n\nClearly explain:\n\n1) Whether a specific coverage exists (e.g., physiotherapy, dental, mental health).\n\n2) What the coverage includes and the reimbursement limits (e.g., up to 80%, up to 300 NIS per session, up to 10 sessions per year).\n\n3) What conditions or documents are required to receive reimbursement (e.g., doctor referral, original receipt).\n\nBehavior rules:\n\n1) Use simple, friendly language. Avoid legal or technical jargon. write only in hebrew, While responding you can use emoji's etc to make the conversation more user friendly.\n\n2) Be concise but complete. Prioritize clarity over formality.\n\n3) If the user asks about a service not covered, say so clearly and try to ask him to provide his number so we can suggest him a different health insurance policy.\n\n4) If the information is unavailable, let the user know and suggest next steps (e.g., contact the insurer directly).\n\n5) You do not invent or guess coverage details. Only respond based on the supbase database.\n   \n"
         }
       },
-      "id": "f3e54290-2db2-4625-9db4-3b06646936aa",
+      "id": "a085d258-0176-49ca-ac1c-c0503eef60c1",
       "name": "AI Agent",
       "type": "@n8n/n8n-nodes-langchain.agent",
       "position": [
-        300,
-        80
+        640,
+        -240
       ],
       "typeVersion": 1.8
     },
@@ -28,17 +28,17 @@
         },
         "options": {}
       },
-      "id": "7ceb53cb-1df5-40d9-9398-7baa0680ceac",
+      "id": "1c5ae9c6-e89d-430a-996f-8e1ca3c8f8c3",
       "name": "OpenAI 4o",
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
       "position": [
-        120,
-        360
+        460,
+        60
       ],
       "typeVersion": 1.2,
       "credentials": {
         "openAiApi": {
-          "id": "KCV3LApWaii2ruAr",
+          "id": "3TVa7eFqDyPshN72",
           "name": "OpenAi account"
         }
       }
@@ -59,14 +59,14 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
       "typeVersion": 1.1,
       "position": [
-        640,
-        340
+        980,
+        40
       ],
-      "id": "633cdddf-f51d-4b3c-b199-b2557cbaaff1",
+      "id": "38858ec4-108b-49d9-b172-5c4ed6650689",
       "name": "Supabase Vector Store",
       "credentials": {
         "supabaseApi": {
-          "id": "auIN1Kzaq1tsUyvT",
+          "id": "wiXHuSk4NsvKZqp8",
           "name": "Supabase account"
         }
       }
@@ -78,14 +78,14 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
       "typeVersion": 1.2,
       "position": [
-        640,
-        520
+        980,
+        220
       ],
-      "id": "39a361b2-6fb1-4b36-a938-f2d2ebbf84aa",
+      "id": "d52ca955-b05d-47b1-9957-cd76258052c5",
       "name": "Embeddings OpenAI",
       "credentials": {
         "openAiApi": {
-          "id": "KCV3LApWaii2ruAr",
+          "id": "3TVa7eFqDyPshN72",
           "name": "OpenAi account"
         }
       }
@@ -101,15 +101,15 @@
       "type": "n8n-nodes-base.whatsApp",
       "typeVersion": 1,
       "position": [
-        700,
-        80
+        1040,
+        -240
       ],
-      "id": "6dc45aa1-bb17-425a-aa12-5b624c71f520",
+      "id": "99e973ac-f74d-4e34-ae8a-1913cd568329",
       "name": "WhatsApp Business Cloud",
       "webhookId": "9640f856-2010-4b34-b04f-a37d2f9f6328",
       "credentials": {
         "whatsAppApi": {
-          "id": "qyrxpRnUkpd8QBz4",
+          "id": "LBTeIduVLxvhHfVn",
           "name": "WhatsApp account"
         }
       }
@@ -124,15 +124,15 @@
       "type": "n8n-nodes-base.whatsAppTrigger",
       "typeVersion": 1,
       "position": [
-        100,
-        80
+        440,
+        -240
       ],
-      "id": "70d86b1f-9dd5-4316-a54e-1b68a2abc1cd",
+      "id": "76aba360-74c1-4682-8732-1ec19eec2d1b",
       "name": "WhatsApp Trigger",
       "webhookId": "c0402e6f-f0b8-43be-aa28-4fb2587d1f2b",
       "credentials": {
         "whatsAppTriggerApi": {
-          "id": "UPnHwJafcM02sXnw",
+          "id": "XzVFC5rUETEg1NNg",
           "name": "WhatsApp OAuth account"
         }
       }
@@ -145,14 +145,14 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        280,
-        360
+        620,
+        60
       ],
-      "id": "ebc0b434-01a7-4ed0-bfa8-5d41b3cf9aba",
+      "id": "3955d8d3-a381-482b-8524-489d5814e5ad",
       "name": "Postgres Chat Memory",
       "credentials": {
         "postgres": {
-          "id": "CHu92lrxAyHgzBOI",
+          "id": "qNWkV2HBAVF2D7QO",
           "name": "Postgres account"
         }
       }
@@ -167,10 +167,10 @@
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        0,
-        0
+        340,
+        -320
       ],
-      "id": "60b98c0d-f50b-403e-80ea-8822e1bb5a5c",
+      "id": "f7a1727f-705c-4a54-901f-8b89f848c573",
       "name": "Sticky Note1"
     }
   ],
@@ -247,11 +247,11 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "6e665dbe-040a-4ba6-be70-2ebb3818d765",
+  "versionId": "4abd1d34-25b5-4053-ba17-fa2625b84e22",
   "meta": {
     "templateCredsSetupCompleted": true,
-    "instanceId": "945e1217de84a65273bba8b5682fa4a65a759a3cf09feebf74c1737fea833d9e"
+    "instanceId": "5a3a47136c4edc81454a2a30e6669a99de0b196292d4fc55416410c8a194ad7a"
   },
-  "id": "QeWlH8nKUUjCJejO",
+  "id": "AgYn8LpnU3yltPna",
   "tags": []
 }
