@@ -1,0 +1,257 @@
+{
+  "name": "Workflow 2 Example",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "=You are “PoliBot,” the friendly chat assistant for people who like to understand if they have coverage with their health insurace. \nYou ask users which insurance policy they have, and based on a structured knowledge base of insurance policies, you answer clearly and accurately.\n\nYour role is to answer user's question regarding specific coverage only on doucments in the supabase KB\n\nClearly explain:\n\n1) Whether a specific coverage exists (e.g., physiotherapy, dental, mental health).\n\n2) What the coverage includes and the reimbursement limits (e.g., up to 80%, up to 300 NIS per session, up to 10 sessions per year).\n\n3) What conditions or documents are required to receive reimbursement (e.g., doctor referral, original receipt).\n\nBehavior rules:\n\n1) Use simple, friendly language. Avoid legal or technical jargon. write only in hebrew, While responding you can use emoji's etc to make the conversation more user friendly.\n\n2) Be concise but complete. Prioritize clarity over formality.\n\n3) If the user asks about a service not covered, say so clearly and try to ask him to provide his number so we can suggest him a different health insurance policy.\n\n4) If the information is unavailable, let the user know and suggest next steps (e.g., contact the insurer directly).\n\n5) You do not invent or guess coverage details. Only respond based on the verified database.\n   \n"
+        }
+      },
+      "id": "f3e54290-2db2-4625-9db4-3b06646936aa",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "position": [
+        300,
+        80
+      ],
+      "typeVersion": 1.8
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {}
+      },
+      "id": "7ceb53cb-1df5-40d9-9398-7baa0680ceac",
+      "name": "OpenAI 4o",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "position": [
+        120,
+        360
+      ],
+      "typeVersion": 1.2,
+      "credentials": {
+        "openAiApi": {
+          "id": "KCV3LApWaii2ruAr",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolName": "smilecraft_knowledge_base",
+        "toolDescription": "Finds information from smilecraft dental clinic",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.1,
+      "position": [
+        640,
+        340
+      ],
+      "id": "633cdddf-f51d-4b3c-b199-b2557cbaaff1",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "auIN1Kzaq1tsUyvT",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        640,
+        520
+      ],
+      "id": "39a361b2-6fb1-4b36-a938-f2d2ebbf84aa",
+      "name": "Embeddings OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "KCV3LApWaii2ruAr",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $('WhatsApp Trigger').item.json.metadata.phone_number_id }}",
+        "recipientPhoneNumber": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1,
+      "position": [
+        700,
+        80
+      ],
+      "id": "6dc45aa1-bb17-425a-aa12-5b624c71f520",
+      "name": "WhatsApp Business Cloud",
+      "webhookId": "9640f856-2010-4b34-b04f-a37d2f9f6328",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "qyrxpRnUkpd8QBz4",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        100,
+        80
+      ],
+      "id": "70d86b1f-9dd5-4316-a54e-1b68a2abc1cd",
+      "name": "WhatsApp Trigger",
+      "webhookId": "c0402e6f-f0b8-43be-aa28-4fb2587d1f2b",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "UPnHwJafcM02sXnw",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id}}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
+      "typeVersion": 1.3,
+      "position": [
+        280,
+        360
+      ],
+      "id": "ebc0b434-01a7-4ed0-bfa8-5d41b3cf9aba",
+      "name": "Postgres Chat Memory",
+      "credentials": {
+        "postgres": {
+          "id": "CHu92lrxAyHgzBOI",
+          "name": "Postgres account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "AI Agent + MCP Client which calls MCP Server for Appointment booking",
+        "height": 660,
+        "width": 960,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "60b98c0d-f50b-403e-80ea-8822e1bb5a5c",
+      "name": "Sticky Note1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI 4o": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings OpenAI": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "WhatsApp Business Cloud",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Postgres Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6e665dbe-040a-4ba6-be70-2ebb3818d765",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "945e1217de84a65273bba8b5682fa4a65a759a3cf09feebf74c1737fea833d9e"
+  },
+  "id": "QeWlH8nKUUjCJejO",
+  "tags": []
+}
